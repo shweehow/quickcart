@@ -1,0 +1,106 @@
+import React, { useEffect, useState } from 'react';
+import { assets } from '@/assets/assets';
+import Image from 'next/image';
+
+const HeaderSlider = () => {
+  const sliderData = [
+    {
+      id: 1,
+      title: 'Experience Pure Sound - Your Perfect Headphones Awaits!',
+      offer: 'Limited Time Offer 30% Off',
+      buttonText1: 'Buy now',
+      buttonText2: 'Find more',
+      imgSrc: assets.header_headphone_image,
+    },
+    {
+      id: 2,
+      title: 'Next-Level Gaming Starts Here - Discover PlayStation 5 Today!',
+      offer: 'Hurry up only few lefts!',
+      buttonText1: 'Shop Now',
+      buttonText2: 'Explore Deals',
+      imgSrc: assets.header_playstation_image,
+    },
+    {
+      id: 3,
+      title: 'Power Meets Elegance - Apple MacBook Pro is Here for you!',
+      offer: 'Exclusive Deal 40% Off',
+      buttonText1: 'Order Now',
+      buttonText2: 'Learn More',
+      imgSrc: assets.header_macbook_image,
+    },
+  ];
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % sliderData.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [sliderData.length]);
+
+  const handleSlideChange = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  return (
+    <>
+      <div className="overflow-hidden rounded-xl my-8">
+        <div
+          className="flex transition-transform duration-700 ease-in-out"
+          style={{
+            transform: `translateX(-${currentSlide * 100}%)`,
+          }}
+        >
+          {sliderData.map((slide, index) => (
+            <div
+              key={slide.id}
+              className="flex items-center min-w-full py-8 md:px-14 px-5 bg-[#E6E9F2] gap-8"
+            >
+              <div className="md:pl-8 max-w-lg">
+                <p className="text-orange-600">{slide.offer}</p>
+                <h1 className="md:text-[40px] md:leading-[48px] text-2xl font-semibold mt-1">
+                  {slide.title}
+                </h1>
+                <div className="flex mt-4 md:mt-6">
+                  <button className="bg-orange-600 text-white font-medium rounded-full md:px-10 px-7 md:py-2.5 py-2">
+                    {slide.buttonText1}
+                  </button>
+                  <button className="group flex font-medium items-center px-6 py-2.5 gap-2">
+                    {slide.buttonText2}
+                    <Image
+                      className="group-hover:translate-x-1 transition"
+                      src={assets.arrow_icon}
+                      alt="arrow_icon"
+                    />
+                  </button>
+                </div>
+              </div>
+              <div className="flex flex-1 items-center justify-center">
+                <Image
+                  className="md:w-72 w-48"
+                  src={slide.imgSrc}
+                  alt={`Slide ${index + 1}`}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex justify-center gap-2">
+        {sliderData.map((_, index) => (
+          <div
+            key={index}
+            onClick={() => handleSlideChange(index)}
+            className={`h-2 w-2 rounded-full cursor-pointer ${
+              currentSlide === index ? 'bg-orange-600' : 'bg-gray-500/30'
+            }`}
+          ></div>
+        ))}
+      </div>
+    </>
+  );
+};
+
+export default HeaderSlider;
